@@ -5,8 +5,10 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,9 +49,10 @@ public class AppContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+
         SQLiteDatabase database = appDatabase.getWritableDatabase();
-        //long id = database.insert(AppDatabase.TABLE, null, contentValues);
-        long id = database.insertWithOnConflict(AppDatabase.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        long id = database.insert(AppDatabase.TABLE, null, contentValues);
+        //long id = database.insertWithOnConflict(AppDatabase.TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
 
         Uri itemUri = ContentUris.withAppendedId(CONTENT_URI, id);
         getContext().getContentResolver().notifyChange(itemUri, null);
