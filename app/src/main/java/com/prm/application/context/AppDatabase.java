@@ -1,4 +1,4 @@
-package com.prm.mobile.context;
+package com.prm.application.context;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class AppDatabase extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "app.db";
-    public static final String TABLE = "student";
+    public static final String DATABASE_NAME = "CarSQLite.db";
+    public static final String TABLE = "Cars";
     private static final int DATABASE_VERSION = 1;
     private static AppDatabase instance;
 
@@ -22,11 +22,10 @@ public class AppDatabase extends SQLiteOpenHelper {
         return instance;
     }
 
-    //"id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, score REAL"
     private static final String CREATE_TABLE = String.format(
             "CREATE TABLE IF NOT EXISTS %s (%s)",
             TABLE,
-            "id TEXT PRIMARY KEY, name TEXT, score REAL"
+            "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, model TEXT NOT NULL, price INTEGER NOT NULL"
     );
 
 

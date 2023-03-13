@@ -1,4 +1,4 @@
-package com.prm.mobile.view;
+package com.prm.application.view;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
@@ -11,20 +11,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.prm.mobile.R;
-import com.prm.mobile.context.AppContentProvider;
-import com.prm.mobile.context.AppDatabase;
+import com.prm.application.R;
+import com.prm.application.context.AppContentProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ItemHolder> {
-    private static ListRecyclerViewAdapter instance;
+public class RecyclerViewAdapter extends RecyclerView.Adapter<ItemHolder> {
+    private static RecyclerViewAdapter instance;
     private List<Item> itemList;
 
-    public static ListRecyclerViewAdapter getInstance(){
+    public static RecyclerViewAdapter getInstance(){
         if(instance == null){
-            instance = new ListRecyclerViewAdapter();
+            instance = new RecyclerViewAdapter();
         }
         return instance;
     }
@@ -38,16 +37,16 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ItemHolder> {
     @NonNull
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_view, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         return new ItemHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item item = itemList.get(position);
-        holder.nameTextView.setText(item.getName());
-        holder.scoreTextView.setText(String.valueOf(item.getScore()));
-        holder.idTextView.setText(item.getId());
+        holder.firstTextView.setText(String.valueOf(item.getFirst()));
+        holder.secondTextView.setText(item.getSecond());
+        holder.thirdTextView.setText(String.valueOf(item.getThird()));
 
         View.OnClickListener handleDelete = new View.OnClickListener() {
             @Override
@@ -55,32 +54,32 @@ public class ListRecyclerViewAdapter extends RecyclerView.Adapter<ItemHolder> {
                 Context context = view.getContext();
                 ContentResolver contentResolver = context.getContentResolver();
                 Item delete = new Item(
-                       item.getId(),
-                       item.getName(),
-                       item.getScore()
+                       item.getFirst(),
+                       item.getSecond(),
+                       item.getThird()
                 );
                 String where = "id = ?";
-                String[] whereClauses = {item.getId()};
+                String[] whereClauses = {String.valueOf(item.getFirst())};
                 contentResolver.delete(AppContentProvider.CONTENT_URI, where, whereClauses);
 
+                //Reload list and re-render
                 List<Item> itemList = new ArrayList<>();
 
-                String[] selectColumns = {"id", "name", "score"};
+                String[] selectColumns = {"id", "model", "price"};
                 Cursor cursor = context.getContentResolver().query(AppContentProvider.CONTENT_URI, selectColumns, null, null, null);
 
                 while (cursor.moveToNext()) {
-                    String id = cursor.getString(0);
-                    String name = cursor.getString(1);
-                    int age = cursor.getInt(2);
-                    Item item = new Item(id, name, age);
+                    int first = cursor.getInt(0);
+                    String second = cursor.getString(1);
+                    int third = cursor.getInt(2);
+                    Item item = new Item(first, second, third);
                     itemList.add(item);
                 }
                 cursor.close();
                 setItemList(itemList);
-
             }
         };
-        holder.deleteButton.setOnClickListener(handleDelete);
+        holder.deleteAction.setOnClickListener(handleDelete);
     }
 
     @Override

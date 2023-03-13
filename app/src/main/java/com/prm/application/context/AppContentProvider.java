@@ -1,28 +1,26 @@
-package com.prm.mobile.context;
+package com.prm.application.context;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class AppContentProvider extends ContentProvider {
-    private static final String AUTHORITY = "com.prm.mobile.Student";
-    private static final String BASE_PATH = "students";
+    private static final String AUTHORITY = "com.prm.application.Car";
+    private static final String BASE_PATH = "cars";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     private AppDatabase appDatabase;
 
     public AppContentProvider() {
-        uriMatcher.addURI(AUTHORITY, "student/*", 1);
+        uriMatcher.addURI(AUTHORITY, "car/*", 1);
     }
 
     @Override

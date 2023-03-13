@@ -1,4 +1,4 @@
-package com.prm.mobile;
+package com.prm.application;
 
 import org.junit.Test;
 
