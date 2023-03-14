@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">se</string>
+    <string name="navigateCreate">Create</string>
+    <string name="navigateUpdate">Update</string>
+</resources>
