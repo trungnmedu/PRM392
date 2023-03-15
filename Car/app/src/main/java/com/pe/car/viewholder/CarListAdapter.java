@@ -43,36 +43,33 @@ public class CarListAdapter extends RecyclerView.Adapter<CarHolder> {
     @Override
     public void onBindViewHolder(@NonNull CarHolder holder, int position) {
         Car car = carList.get(position);
-        holder.idTextView.setText(String.valueOf(car.getFirst()));
-        holder.modelTextView.setText(String.valueOf(car.getSecond()));
-        holder.priceTextView.setText(String.valueOf(car.getThird()));
+        holder.idTextView.setText(String.valueOf(car.getId()));
+        holder.modelTextView.setText(String.valueOf(car.getModel()));
+        holder.priceTextView.setText(String.valueOf(car.getPrice()));
 
-        View.OnClickListener handleDelete = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = view.getContext();
-                ContentResolver contentResolver = context.getContentResolver();
+        View.OnClickListener handleDelete = view -> {
+            Context context = view.getContext();
+            ContentResolver contentResolver = context.getContentResolver();
 
-                //Delete
-                String where = "id = ?";
-                String[] whereClauses = {String.valueOf(car.getFirst())};
-                contentResolver.delete(CarContentProvider.CONTENT_URI, where, whereClauses);
+            //Delete
+            String where = "id = ?";
+            String[] whereClauses = {String.valueOf(car.getId())};
+            contentResolver.delete(CarContentProvider.CONTENT_URI, where, whereClauses);
 
-                //Reload list
-                List<Car> cars = new ArrayList<>();
-                Cursor cursor = context.getContentResolver().query(CarContentProvider.CONTENT_URI, Database.COLUMNS, null, null, null);
+            //Reload list
+            List<Car> cars = new ArrayList<>();
+            Cursor cursor = context.getContentResolver().query(CarContentProvider.CONTENT_URI, Database.COLUMNS, null, null, null);
 
-                while (cursor.moveToNext()) {
-                    int first = cursor.getInt(0);
-                    String second = cursor.getString(1);
-                    int third = cursor.getInt(2);
-                    Car car = new Car(first, second, third);
-                    cars.add(car);
-                }
-
-                cursor.close();
-                setItemList(cars);
+            while (cursor.moveToNext()) {
+                int id = cursor.getInt(0);
+                String model = cursor.getString(1);
+                int price = cursor.getInt(2);
+                Car result = new Car(id, model, price);
+                cars.add(result);
             }
+
+            cursor.close();
+            setItemList(cars);
         };
         holder.deleteButton.setOnClickListener(handleDelete);
     }

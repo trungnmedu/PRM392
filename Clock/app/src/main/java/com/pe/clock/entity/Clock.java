@@ -1,13 +1,13 @@
-package com.pe.car.entity;
+package com.pe.clock.entity;
 
-public class Car {
+public class Clock {
     private final int id;
-    private final String model;
+    private final String name;
     private final int price;
 
-    public Car(int id, String model, int price) {
+    public Clock(int id, String name, int price) {
         this.id = id;
-        this.model = model;
+        this.name = name;
         this.price = price;
     }
 
@@ -15,8 +15,8 @@ public class Car {
         return id;
     }
 
-    public String getModel() {
-        return model;
+    public String getName() {
+        return name;
     }
 
     public int getPrice() {
